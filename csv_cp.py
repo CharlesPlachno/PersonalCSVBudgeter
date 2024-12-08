@@ -3,7 +3,8 @@ import csv
 class CSVCP():
     """Contains useful methods for csv files"""
     rows = []
-    def __init__(self, path):
+
+    def from_file(self, path):
         rows = []
         with open(path, newline="") as csvfile:
             csvreader = csv.reader(csvfile)
@@ -14,3 +15,8 @@ class CSVCP():
     def print_rows(self):
         for row in self.rows:
             print(row)
+
+    def write_to(self, path):
+        with open(path, "w", newline="") as csvfile:
+            csvwriter = csv.writer(csvfile)
+            csvwriter.writerows(self.rows)
