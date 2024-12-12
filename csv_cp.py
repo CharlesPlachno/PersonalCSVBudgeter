@@ -5,12 +5,10 @@ class CSVCP():
     rows = []
 
     def from_file(self, path):
-        rows = []
         with open(path, newline="") as csvfile:
             csvreader = csv.reader(csvfile)
             for row in csvreader:
-                rows.append(row)
-        self.rows = rows
+                self.rows.append(row)
 
     def print_rows(self):
         for row in self.rows:
@@ -19,4 +17,5 @@ class CSVCP():
     def write_to(self, path):
         with open(path, "w", newline="") as csvfile:
             csvwriter = csv.writer(csvfile)
-            csvwriter.writerows(self.rows)
+            for row in self.rows:
+                csvwriter.writerow(row)

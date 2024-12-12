@@ -1,5 +1,4 @@
-from csv_cp import CSVCP
-from mega_csv import MegaCSV
+from historydb import HistoryDB
 import os
 """
 For each file in the input path, write each unique entry into the master csv file.
@@ -18,19 +17,17 @@ default_tags = [
     ["STEAM", "videogames"]
 ]
 input_dir = os.listdir(IN_FOLDER_PATH)
-mega_file = MegaCSV(MEGA_TRANSACTION_PATH)
+mega_file = HistoryDB()
 for item in input_dir:
     path = f"{IN_FOLDER_PATH}/{item}"
     if os.path.isfile(path):
         print(path)
-        in_file = CSVCP()
-        in_file.from_file(path)
-        print("PRINTING READ FILE")
-        mega_file.add_new_lines(in_file.rows)
+        #add lines
+        mega_file.add_lines_from_csv(path)
 for query in default_tags:
     mega_file.give_tags(query[0], query[1])
-print("PRINTING TAGGED MEGA")
-mega_file.print_rows()
-mega_file.write_to(MEGA_TRANSACTION_PATH)
+print("PRINTING SQLite3 DB")
+mega_file.print_table()
+
 
 
