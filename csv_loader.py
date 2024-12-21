@@ -24,8 +24,8 @@ for item in input_dir:
         print(path)
         #add lines
         mega_file.add_lines_from_csv(path)
-for query in default_tags:
-    mega_file.give_tags(query[0], query[1])
+for search_strings in default_tags:
+    mega_file.give_tags(search_strings[0], search_strings[1])
 print("PRINTING SQLite3 DB")
 mega_file.print_table()
 

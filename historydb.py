@@ -13,12 +13,15 @@ class HistoryDB:
     def __init__(self):
         self.create_table()
 
-    def sql_query(self, sql, params=None, get_response=False):
+    def sql_query(self, sql, params=None, get_response=False, many=False):
         response = ""
         conn = sqlite3.connect('data')
         c = conn.cursor()
         if params:
-            c.execute(sql, params)
+            if many:
+                c.executemany(sql, params)
+            else:
+                c.execute(sql, params)
         else:
             c.execute(sql)
         if get_response:
@@ -52,9 +55,23 @@ class HistoryDB:
             self.add_row([row[0], row[1], row[4], ''])
 
     def give_tags(self, search_string, tag):
-        pass
+        #get all rows with a substring of search_string in their name
+        query = f"SELECT ROWID FROM {self.table_name} WHERE name LIKE ?"
+        params = ('%' + search_string + '%',)
+        results = self.sql_query(query, params, get_response=True)
+        print(results)
+        #save the row_id's of each found row
+        #update the tag for each row id
+
+        query = f"UPDATE {self.table_name} SET tag = ? WHERE ROWID = ?"
+        params = []
+        for row in results:
+            params.append((tag, row[0]))
+        changed = self.sql_query(query, params, get_response=True, many=True)
+        print(changed)
 
     def print_table(self):
         sql = f"SELECT * FROM {self.table_name}"
         response = self.sql_query(sql, get_response=True)
-        print(response)
+        for row in response:
+            print(row)
